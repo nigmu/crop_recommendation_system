@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crop Prediction Result</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2ecc71;
+            --accent-color: #e74c3c;
+            --background-color: #ecf0f1;
+            --text-color: #2c3e50;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            background-color: var(--background-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            text-align: center;
+            background-color: white;
+            padding: 3em;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            max-width: 600px;
+            width: 90%;
+        }
+
+        h1 {
+            color: var(white);
+            font-size: 2.5em;
+            margin-bottom: 0.5em;
+        }
+
+        .prediction {
+            background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
+            color: white;
+            padding: 2em;
+            border-radius: 15px;
+            margin: 2em 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .prediction h2 {
+            font-size: 2em;
+            margin-bottom: 0.5em;
+        }
+
+        .prediction p {
+            font-size: 3em;
+            font-weight: bold;
+            margin: 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .home-button {
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: inline-block;
+        }
+
+        .home-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+
+
+
+        {% comment %} prediction.html {% endcomment %}
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            width: 100%;
+        }
+        
+        .table-responsive {
+            overflow-x: auto;
+            margin-top: 2em;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-top: 1em;
+        }
+        
+        th, td {
+            text-align: left;
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        th {
+            background-color: var(--primary-color);
+            color: white;
+            text-transform: uppercase;
+            position: sticky;
+            top: 0;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        
+        tr:hover {
+            background-color: #ddd;
+        }
+        
+        @media screen and (max-width: 600px) {
+            table, thead, tbody, th, td, tr {
+                display: block;
+            }
+            
+            thead tr {
+                position: absolute;
+                top: -9999px;
+                left: -9999px;
+            }
+            
+            tr {
+                margin-bottom: 0.625em;
+            }
+            
+            td {
+                border: none;
+                position: relative;
+                padding-left: 50%;
+            }
+            
+            td:before {
+                content: attr(data-label);
+                position: absolute;
+                left: 6px;
+                width: 45%;
+                padding-right: 10px;
+                white-space: nowrap;
+                font-weight: bold;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="prediction">
+            {% if predicted_crop %}
+                <h2>Recommended Crop:</h2>
+                <p>{{ predicted_crop }}</p>
+            {% else %}
+                <p>No predicted crop available.</p>
+            {% endif %}
+        </div>
+
+        <a href="{% url 'home' %}" class="home-button">Back to Home</a>
+
+
+        <div class="table-responsive">
+            <table id="soilDataTable">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>N</th>
+                        <th>P</th>
+                        <th>K</th>
+                        <th>Temperature</th>
+                        <th>Humidity</th>
+                        <th>Ph</th>
+                        <th>Rainfall</th>
+                        <th>Predicted Crop</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for data, prediction in predictions %}
+                    <tr>
+                        <td>{{ forloop.revcounter }}</td>
+                        <td data-label="N">{{ data.N }}</td>
+                        <td data-label="P">{{ data.P }}</td>
+                        <td data-label="K">{{ data.K }}</td>
+                        <td data-label="Temperature">{{ data.Temperature }}</td>
+                        <td data-label="Humidity">{{ data.Humidity }}</td>
+                        <td data-label="Ph">{{ data.Ph }}</td>
+                        <td data-label="Rainfall">{{ data.Rainfall }}</td>
+                        <td data-label="Predicted Crop">{{ prediction }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

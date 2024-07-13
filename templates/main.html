@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soil Data Analysis</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2ecc71;
+            --accent-color: #e74c3c;
+            --background-color: #ecf0f1;
+            --text-color: #2c3e50;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            background-color: var(--background-color);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            text-align: center;
+            padding: 2em;
+            margin-bottom: 2em;
+            border-radius: 0 0 50% 50% / 20px;
+        }
+
+        h1, h2 {
+            margin: 0;
+        }
+
+        form {
+            background-color: white;
+            padding: 2em;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 2em;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 1em;
+            border: 2px solid var(--primary-color);
+            border-radius: 5px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="number"]:focus {
+            outline: none;
+            border-color: var(--secondary-color);
+        }
+
+        button {
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: 600;
+            transition: transform 0.3s ease;
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 10px;
+            margin-top: 2em;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 15px;
+        }
+
+        th {
+            background-color: var(--primary-color);
+            color: white;
+            text-transform: uppercase;
+        }
+
+        tr {
+            background-color: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        tr:hover {
+            transform: translateY(-3px);
+        }
+
+        .predicted-crop {
+            background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
+            color: white;
+            padding: 2em;
+            border-radius: 15px;
+            text-align: center;
+            margin-top: 2em;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .predicted-crop h2 {
+            font-size: 2.5em;
+            margin-bottom: 0.5em;
+        }
+
+        .predicted-crop p {
+            font-size: 3.5em;
+            font-weight: bold;
+            margin: 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        {% comment %} for more responsive table {% endcomment %}
+        .table-responsive {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+    
+        @media screen and (max-width: 600px) {
+            table, thead, tbody, th, td, tr {
+                display: block;
+            }
+    
+            thead tr {
+                position: absolute;
+                top: -9999px;
+                left: -9999px;
+            }
+    
+            tr {
+                margin-bottom: 1em;
+            }
+    
+            td {
+                border: none;
+                position: relative;
+                padding-left: 50%;
+            }
+    
+            td:before {
+                content: attr(data-label);
+                position: absolute;
+                left: 6px;
+                width: 45%;
+                padding-right: 10px;
+                white-space: nowrap;
+                font-weight: bold;
+            }
+        }
+    </style>
+</head>
+
+
+<body>
+    <div class="container">
+        <header>
+            <h1>Soil Data Analysis</h1>
+        </header>
+
+        {% comment %} {% if predicted_crop %}
+        <div class="predicted-crop">
+            <h2>Predicted Crop</h2>
+            <p>{{ predicted_crop }}</p>
+        </div>
+        {% endif %} {% endcomment %}
+
+        <br>
+        <br>
+
+        <form method="post" id="soilForm">
+            <h2>Enter Soil Data</h2>
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Recommended Crop</button>
+        </form>
+
+        
+
+        <h2>Submitted Soil Data</h2>
+        <table id="soilDataTable">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>N</th>
+                    <th>P</th>
+                    <th>K</th>
+                    <th>Temperature</th>
+                    <th>Humidity</th>
+                    <th>Ph</th>
+                    <th>Rainfall</th>
+                    <th>Predicted Crop</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for data, prediction in predictions %}
+                <tr>
+                    <td>{{ forloop.revcounter }}</td>
+                    <td>{{ data.N }}</td>
+                    <td>{{ data.P }}</td>
+                    <td>{{ data.K }}</td>
+                    <td>{{ data.Temperature }}</td>
+                    <td>{{ data.Humidity }}</td>
+                    <td>{{ data.Ph }}</td>
+                    <td>{{ data.Rainfall }}</td>
+                    <td>{{ prediction }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+
+</body>
+</html>
