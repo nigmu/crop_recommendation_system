@@ -1,4 +1,6 @@
+import os
 import joblib
+
 
 crop_names = {
     0: "apple", 1: "banana", 2: "blackgram", 3: "chickpea", 4: "coconut",
@@ -9,7 +11,8 @@ crop_names = {
 }
 
 def load_model():
-    return joblib.load("C:/NPersonal/Projects/CropRecommendationSystem/utils/gaussian_nb_model.joblib")
+    model_path = os.path.join(os.path.dirname(__file__), 'gaussian_nb_model.joblib')
+    return joblib.load(model_path)
 
 def crop_predictor(data):
     y_pred = load_model().predict([data])
