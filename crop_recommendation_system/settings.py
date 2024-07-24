@@ -129,3 +129,11 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+
+
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://crop-recommendation-system-a6zs.onrender.com',
+    # Add any other domains here if needed
+]
