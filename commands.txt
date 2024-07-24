@@ -1,3 +1,10 @@
+follow these steps for docker run:
+
+
 docker build --tag crop_recom_container_docker .
 
-docker run --publish 8002:8002 crop_recom_container_docker
+docker run --publish 8000:8000 crop_recom_container_docker
+
+docker name change before push: docker tag crop_recom_container_docker nigmu/crop-recommendation-system:latest
+
+docker push: docker push nigmu/crop-recommendation-system:latest

@@ -25,7 +25,12 @@ SECRET_KEY = "django-insecure-kw@(^u0=xjy^(8_@hf%0n1i%i+sfbrrg_a8x=*7=!oa=pui1=z
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+
+
+# ALLOWED_HOSTS = ['crop-recommendation-system-d2aw.onrender.com']
+ALLOWED_HOSTS = [".onrender.com", "localhost"]
+
+
 
 
 # Application definition

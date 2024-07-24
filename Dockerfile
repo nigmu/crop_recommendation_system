@@ -1,6 +1,9 @@
 FROM python:3.12.2
 
-WORKDIR /docker_cont_crop_recom
+WORKDIR /app
+
+ENV PYTHONUNBUFFERED 1
+ENV PYTHONDONTWRITEBYTECODE 1
 
 LABEL org.opencontainers.image.authors="nigmucode@gmail.com"
 
@@ -10,5 +13,6 @@ RUN pip3 install -r requirements.txt
 
 COPY . .
 
-CMD ["python3", "manage.py", "runserver", "0.0.0.0:8002"]
+# CMD ["python3", "manage.py", "runserver", "0.0.0.0:8000"]
+ENTRYPOINT [ "gunicorn", "core.wsgi", "-b", "0.0.0.0:8000"]
 
