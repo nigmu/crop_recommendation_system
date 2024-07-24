@@ -15,8 +15,8 @@ COPY . .
 
 EXPOSE 8000
 
-# CMD ["python3", "manage.py", "runserver", "0.0.0.0:8000"]
+CMD ["python3", "manage.py", "runserver", "0.0.0.0:8000"]
 # ENTRYPOINT [ "gunicorn", "core.wsgi", "-b", "0.0.0.0:8000"]
 # ENTRYPOINT [ "gunicorn", "core.wsgi", "-b" ]
-CMD ["gunicorn", "crop_recommendation_system.wsgi"]
+# CMD ["gunicorn", "0.0.0.0:8000", "crop_recommendation_system.wsgi"]
 
